@@ -1,0 +1,3 @@
+﻿#!/bin/sh
+moon fmt --check
+moon test
