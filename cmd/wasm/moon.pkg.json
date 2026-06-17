@@ -1,0 +1,1 @@
+{ "is_main": true, "link": { "wasm": { "exports": ["wasm_init"] } } }
