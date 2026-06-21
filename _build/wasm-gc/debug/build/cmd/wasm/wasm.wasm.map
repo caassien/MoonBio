@@ -1,1 +1,0 @@
-{"version":3,"sources":["C:\\Users\\px830\\Desktop\\杨凯\\cassien\\cmd\\wasm\\main.mbt"],"sourcesContent":["pub fn wasm_init() -> Unit { }\r\nfn main { }\r\n"],"mappings":"uDACS,EAAA"}
