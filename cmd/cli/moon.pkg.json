@@ -1,1 +1,4 @@
-{ "is_main": true }
+{
+  "is_main": true,
+  "import": ["cassien/moonbio/src/align"]
+}
