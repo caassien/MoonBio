@@ -2,16 +2,19 @@
 
 ![CI](https://github.com/caassien/cassien/actions/workflows/ci.yml/badge.svg)
 
-MoonBio is a lightweight bioinformatics library for MoonBit. It provides basic data structures and alignment algorithms to process DNA/RNA sequences, primarily targeting WASM environments.
+MoonBio is a lightweight, extreme high-quality bioinformatics library for MoonBit. It provides core data structures, parsers, and advanced alignment algorithms to process DNA/RNA sequences, primarily targeting WASM environments.
 
 ## Features
 
-- **Sequence Ops**: Basic types and operations for DNA/RNA (e.g., reverse complement, transcription).
-- **Parsers**: A simple zero-allocation FASTA file reader.
+- **Sequence Ops**: Basic types and operations for DNA/RNA (reverse complement, transcription).
+- **Parsers**: High-performance, zero-allocation FASTA and FASTQ readers.
 - **Alignment Algorithms**:
   - Needleman-Wunsch (Global)
   - Smith-Waterman (Local)
   - Levenshtein Distance
+  - **Multiple Sequence Alignment (MSA)**: Progressive alignment strategy
+- **Machine Learning**:
+  - **HMM-based Motif Discovery**: Viterbi path decoding engine
 
 ## Quick Start
 
@@ -44,7 +47,7 @@ Add the dependency to your `moon.pkg.json`:
 
 ```json
 {
-  "import": ["cassien/moonbio/src/align"]
+  "import": ["cassien/moonbio/src/align", "cassien/moonbio/src/core", "cassien/moonbio/src/parser"]
 }
 ```
 
@@ -57,11 +60,6 @@ fn main {
   println(res.alignment_b)
 }
 ```
-
-## TODO / Roadmap
-- FASTQ parsing
-- MSA (Multiple Sequence Alignment)
-- HMM-based motif discovery
 
 ## License
 MIT

@@ -2,3 +2,4 @@
 .mooncakes/
 *.wasm
 .DS_Store
+_build/
