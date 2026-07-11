@@ -76,3 +76,16 @@ powershell -ExecutionPolicy Bypass -File .\scripts\verify_acceptance.ps1
 - 当前分支、提交数量、远程默认分支
 - 有效 MoonBit 文件数量与行数
 - `moon info`、`git diff --exit-code`
+
+## 6. Mooncakes 发布验证
+
+```powershell
+moon whoami
+moon publish --dry-run
+moon publish
+```
+
+当前已确认：
+
+- 登录身份为 `caassien`
+- `caassien/moonbio@0.1.1` 已成功发布
