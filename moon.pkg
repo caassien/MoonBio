@@ -1,0 +1,9 @@
+import {
+  "caassien/moonbio/src/align",
+  "caassien/moonbio/src/core",
+  "caassien/moonbio/src/parser",
+}
+
+options(
+  is_main: false,
+)

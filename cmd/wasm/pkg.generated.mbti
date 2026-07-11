@@ -1,0 +1,20 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "caassien/moonbio/cmd/wasm"
+
+// Values
+pub fn demo_fasta_summary() -> String
+
+pub fn demo_global_alignment() -> String
+
+pub fn demo_msa() -> String
+
+pub fn wasm_init() -> String
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits
+

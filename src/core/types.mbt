@@ -1,3 +1,4 @@
+///|
 pub(all) enum Nucleotide {
   A
   C
@@ -6,6 +7,7 @@ pub(all) enum Nucleotide {
   U
 } derive(Eq, Debug)
 
+///|
 pub(all) struct DnaSequence {
-  sequence: Array[Nucleotide]
+  sequence : Array[Nucleotide]
 }

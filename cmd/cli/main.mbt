@@ -1,7 +1,29 @@
+///|
+fn print_result(prefix : String, result : Result[String, String]) -> Unit {
+  match result {
+    Ok(message) => println(prefix + message)
+    Err(message) => println(prefix + "error: " + message)
+  }
+}
+
+///|
 fn main {
-  println("MoonBio CLI Engine v0.1.0 started.")
-  let res = @align.needleman_wunsch("GATTACA", "GCATGCU", 1, -1, -1)
-  println("Alignment Score: \{res.score}")
-  println("Seq 1: \{res.alignment_a}")
-  println("Seq 2: \{res.alignment_b}")
+  let engine = @moonbio.BioEngine::new()
+  println("MoonBio CLI demo")
+
+  let global = engine.global_align("GATTACA", "GCATGCU")
+  println("Global alignment score: \{global.score}")
+  println("Seq1: \{global.alignment_a}")
+  println("Seq2: \{global.alignment_b}")
+
+  let msa = engine.multiple_align(["GATTACA", "GCATGCU", "GACTACA"])
+  println("MSA consensus: \{msa.consensus}")
+  for i = 0; i < msa.aligned_sequences.length(); i = i + 1 {
+    println("MSA[\{i}]: \{msa.aligned_sequences[i]}")
+  }
+
+  let fasta_demo = ">seq1\nGATTACA\n>seq2\nGACTATA\n"
+  let fastq_demo = "@read1\nGATTACA\n+\nIIIIIII\n@read2\nGACTATA\n+\nHHHHHHH\n"
+  print_result("FASTA summary: ", engine.summarize_fasta(fasta_demo))
+  print_result("FASTQ summary: ", engine.summarize_fastq(fastq_demo))
 }

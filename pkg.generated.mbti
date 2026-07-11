@@ -1,0 +1,51 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "caassien/moonbio"
+
+import {
+  "caassien/moonbio/src/align",
+  "moonbitlang/core/debug",
+}
+
+// Values
+pub fn default_alignment_config() -> AlignmentConfig
+
+pub fn gc_ratio_percent(String) -> Int
+
+pub fn normalize_sequence(String) -> String
+
+pub fn validate_dna_string(String) -> Result[Unit, String]
+
+pub fn validate_non_empty_records(Int, String) -> Result[Unit, String]
+
+// Errors
+
+// Types and methods
+pub struct AlignmentConfig {
+  match_score : Int
+  mismatch_score : Int
+  gap_penalty : Int
+} derive(Eq, @debug.Debug)
+
+pub struct BioEngine {
+  config : AlignmentConfig
+} derive(Eq, @debug.Debug)
+pub fn BioEngine::global_align(Self, String, String) -> @align.AlignmentResult
+pub fn BioEngine::local_align(Self, String, String) -> @align.AlignmentResult
+pub fn BioEngine::multiple_align(Self, Array[String]) -> @align.MsaResult
+pub fn BioEngine::new() -> Self
+pub fn BioEngine::summarize_fasta(Self, String) -> Result[String, String]
+pub fn BioEngine::summarize_fastq(Self, String) -> Result[String, String]
+pub fn BioEngine::with_config(AlignmentConfig) -> Self
+
+pub struct SequenceContext {
+  id : String
+  sequence : String
+  length : Int
+  gc_percent : Int
+} derive(Eq, @debug.Debug)
+pub fn SequenceContext::new(String, String) -> Self
+
+// Type aliases
+
+// Traits
+

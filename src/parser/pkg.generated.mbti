@@ -1,0 +1,48 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "caassien/moonbio/src/parser"
+
+import {
+  "moonbitlang/core/debug",
+}
+
+// Values
+pub fn fasta_summary(String) -> Result[FastaStats, String]
+
+pub fn fastq_summary(String) -> Result[FastqStats, String]
+
+pub fn parse_fasta(String) -> Result[Array[FastaRecord], String]
+
+pub fn parse_fastq(String) -> Result[Array[FastqRecord], String]
+
+// Errors
+
+// Types and methods
+pub struct FastaRecord {
+  id : String
+  sequence : String
+} derive(Eq, @debug.Debug)
+
+pub struct FastaStats {
+  record_count : Int
+  total_bases : Int
+  min_length : Int
+  max_length : Int
+} derive(Eq, @debug.Debug)
+
+pub struct FastqRecord {
+  id : String
+  sequence : String
+  quality : String
+} derive(Eq, @debug.Debug)
+
+pub struct FastqStats {
+  record_count : Int
+  total_bases : Int
+  min_length : Int
+  max_length : Int
+} derive(Eq, @debug.Debug)
+
+// Type aliases
+
+// Traits
+

@@ -1,19 +1,34 @@
-﻿name: CI
+name: CI
 
 on:
   push:
-    branches: [ main ]
+    branches:
+      - main
   pull_request:
-    branches: [ main ]
+    branches:
+      - main
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  check-and-test:
+    name: Check and Test (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+
     steps:
-    - uses: actions/checkout@v3
-    - name: Install MoonBit
-      run: curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash
-    - name: Build
-      run: moon build
-    - name: Test
-      run: moon test
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Setup MoonBit 0.10.3
+        uses: hustcer/setup-moonbit@v1
+        with:
+          version: 0.10.3
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Verify acceptance
+        shell: pwsh
+        run: ./scripts/verify_acceptance.ps1 -RequireNative

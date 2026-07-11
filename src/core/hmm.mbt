@@ -1,16 +1,18 @@
+///|
 pub(all) struct HMM {
-  states: Array[String]
-  observations: Array[String]
-  start_prob: Array[Double]
-  trans_prob: Array[Array[Double]]
-  emit_prob: Array[Array[Double]]
+  states : Array[String]
+  observations : Array[String]
+  start_prob : Array[Double]
+  trans_prob : Array[Array[Double]]
+  emit_prob : Array[Array[Double]]
 }
 
+///|
 /// Viterbi decoding algorithm to find the most likely sequence of hidden states.
-pub fn viterbi(model: HMM, obs_seq: Array[Int]) -> Array[String] {
+pub fn viterbi(model : HMM, obs_seq : Array[Int]) -> Array[String] {
   let n_states = model.states.length()
   let t_len = obs_seq.length()
-  
+
   if t_len == 0 {
     return []
   }
@@ -20,7 +22,7 @@ pub fn viterbi(model: HMM, obs_seq: Array[Int]) -> Array[String] {
   for i = 0; i < t_len; i = i + 1 {
     v[i] = Array::make(n_states, 0.0)
   }
-  
+
   // path[t][j] stores the state index at time t-1 that maximizes the probability for state j at time t
   let path = Array::make(t_len, [])
   for i = 0; i < t_len; i = i + 1 {
@@ -73,6 +75,6 @@ pub fn viterbi(model: HMM, obs_seq: Array[Int]) -> Array[String] {
   for t = 0; t < t_len; t = t + 1 {
     result[t] = model.states[best_path[t]]
   }
-  
+
   result
 }

@@ -1,4 +1,5 @@
-pub fn parse_dna(s: String) -> Result[DnaSequence, String] {
+///|
+pub fn parse_dna(s : String) -> Result[DnaSequence, String] {
   let seq = Array::new(capacity=s.length())
   for i = 0; i < s.length(); i = i + 1 {
     let c = s[i].to_int().unsafe_to_char()

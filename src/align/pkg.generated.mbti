@@ -1,0 +1,39 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "caassien/moonbio/src/align"
+
+import {
+  "moonbitlang/core/debug",
+}
+
+// Values
+pub fn levenshtein_distance(String, String) -> Int
+
+pub fn min(Int, Int) -> Int
+
+pub fn needleman_wunsch(String, String, Int, Int, Int) -> AlignmentResult
+
+pub fn progressive_msa(Array[String], Int, Int, Int) -> Array[String]
+
+pub fn progressive_msa_result(Array[String], Int, Int, Int) -> MsaResult
+
+pub fn smith_waterman(String, String, Int, Int, Int) -> AlignmentResult
+
+// Errors
+
+// Types and methods
+pub struct AlignmentResult {
+  score : Int
+  alignment_a : String
+  alignment_b : String
+}
+
+pub struct MsaResult {
+  aligned_sequences : Array[String]
+  consensus : String
+  total_score : Int
+} derive(Eq, @debug.Debug)
+
+// Type aliases
+
+// Traits
+

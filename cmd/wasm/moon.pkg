@@ -1,0 +1,18 @@
+import {
+  "caassien/moonbio/src/align",
+  "caassien/moonbio/src/parser",
+}
+
+options(
+  is_main: true,
+  link: {
+    "wasm": {
+      "exports": [
+        "wasm_init",
+        "demo_global_alignment",
+        "demo_msa",
+        "demo_fasta_summary",
+      ],
+    },
+  },
+)

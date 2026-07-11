@@ -1,0 +1,43 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "caassien/moonbio/src/core"
+
+import {
+  "moonbitlang/core/debug",
+}
+
+// Values
+pub fn parse_dna(String) -> Result[DnaSequence, String]
+
+pub fn reverse_complement(DnaSequence) -> DnaSequence
+
+pub fn transcribe(DnaSequence) -> Array[Nucleotide]
+
+pub fn viterbi(HMM, Array[Int]) -> Array[String]
+
+// Errors
+
+// Types and methods
+pub(all) struct DnaSequence {
+  sequence : Array[Nucleotide]
+}
+
+pub(all) struct HMM {
+  states : Array[String]
+  observations : Array[String]
+  start_prob : Array[Double]
+  trans_prob : Array[Array[Double]]
+  emit_prob : Array[Array[Double]]
+}
+
+pub(all) enum Nucleotide {
+  A
+  C
+  G
+  T
+  U
+} derive(Eq, @debug.Debug)
+
+// Type aliases
+
+// Traits
+
