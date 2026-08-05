@@ -15,6 +15,7 @@
 - [ ] GitLink 默认分支与 GitHub 默认分支完全统一
 - [x] Mooncakes 身份链路复核完成
 - [x] Mooncakes `0.1.1` 正式发布
+- [ ] Mooncakes `0.1.2` 整改版本发布
 
 ## 当前已确认状态
 
@@ -25,6 +26,7 @@
 - Mooncakes 当前登录身份：`caassien`
 - `0.1.0` 已存在于 Mooncakes，整改版本需使用新版本号发布
 - Mooncakes 已成功发布版本：`caassien/moonbio@0.1.1`
+- 待发布整改版本：`caassien/moonbio@0.1.2`
 
 ## 下一步收尾
 

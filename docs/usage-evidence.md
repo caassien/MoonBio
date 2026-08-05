@@ -90,3 +90,4 @@ moon publish
 
 - 登录身份为 `caassien`
 - `caassien/moonbio@0.1.1` 已成功发布
+- 整改后版本使用 `caassien/moonbio@0.1.2`，发布前执行 `moon publish --dry-run`
