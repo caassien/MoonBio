@@ -15,7 +15,7 @@ function Get-RemoteHeadBranch([string]$remoteName) {
 }
 
 function Get-MoonBitMetrics {
-  $files = git ls-files | Where-Object { $_ -match "\.mbti?$" }
+  $files = git ls-files | Where-Object { $_ -match "\.mbt$" }
   $lineCount = 0
   foreach ($file in $files) {
     if (Test-Path $file) {

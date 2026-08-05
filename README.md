@@ -20,6 +20,7 @@ MoonBio 是一个面向 MoonBit 生态的生物信息学基础库，聚焦序列
   - 多记录 FASTA 解析。
   - FASTQ 解析与质量长度一致性校验。
   - FASTA / FASTQ 汇总统计。
+  - FASTA GC 百分比与 FASTQ Phred+33 质量范围统计。
 - `src/align`
   - Needleman-Wunsch 全局比对。
   - Smith-Waterman 局部比对。
@@ -109,6 +110,15 @@ powershell -ExecutionPolicy Bypass -File .\scripts\verify_acceptance.ps1
 ```powershell
 powershell -ExecutionPolicy Bypass -File .\scripts\verify_acceptance.ps1 -RequireNative
 ```
+
+## 性能与正确性证据
+
+算法采用可解释的动态规划基线：全局/局部比对的时间复杂度为
+`O(m*n)`、空间复杂度为 `O(m*n)`；渐进式 MSA 以第一条序列为中心，依次合并
+两两比对结果。解析器会拒绝缺失头部、空序列、非法字符和 FASTQ 质量长度不一致，
+并提供 GC 与质量范围统计，便于在真实数据上复核边界行为。
+
+可复现实验步骤见 [docs/benchmarks.md](docs/benchmarks.md)。
 
 ## MoonBit 包信息
 

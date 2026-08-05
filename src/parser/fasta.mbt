@@ -153,3 +153,40 @@ pub fn fasta_summary(content : String) -> Result[FastaStats, String] {
     }
   }
 }
+
+///|
+/// Return the GC percentage of all canonical bases in a FASTA document.
+/// Ambiguous symbols are accepted by the parser but are excluded from the
+/// denominator, which keeps the metric explicit and reproducible.
+pub fn fasta_gc_percent(content : String) -> Result[Int, String] {
+  match parse_fasta(content) {
+    Err(msg) => Err(msg)
+    Ok(records) => {
+      let mut gc = 0
+      let mut canonical = 0
+      for record in records {
+        for i = 0; i < record.sequence.length(); i = i + 1 {
+          let c = record.sequence[i]
+          if c == 'A' ||
+            c == 'a' ||
+            c == 'C' ||
+            c == 'c' ||
+            c == 'G' ||
+            c == 'g' ||
+            c == 'T' ||
+            c == 't' {
+            canonical = canonical + 1
+            if c == 'C' || c == 'c' || c == 'G' || c == 'g' {
+              gc = gc + 1
+            }
+          }
+        }
+      }
+      if canonical == 0 {
+        Ok(0)
+      } else {
+        Ok(gc * 100 / canonical)
+      }
+    }
+  }
+}

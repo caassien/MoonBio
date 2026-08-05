@@ -86,3 +86,35 @@ pub fn fastq_summary(content : String) -> Result[FastqStats, String] {
     }
   }
 }
+
+///|
+/// Return the minimum and maximum Phred+33 quality values in a FASTQ file.
+/// The result is `[minimum, maximum]`; an empty quality stream is rejected.
+pub fn fastq_quality_range(content : String) -> Result[Array[Int], String] {
+  match parse_fastq(content) {
+    Err(msg) => Err(msg)
+    Ok(records) => {
+      if records.length() == 0 {
+        return Err("FASTQ input contains no records")
+      }
+      let first_quality = records[0].quality
+      if first_quality.length() == 0 {
+        return Err("FASTQ quality data is empty")
+      }
+      let mut minimum = first_quality[0].to_int() - 33
+      let mut maximum = minimum
+      for record in records {
+        for i = 0; i < record.quality.length(); i = i + 1 {
+          let value = record.quality[i].to_int() - 33
+          if value < minimum {
+            minimum = value
+          }
+          if value > maximum {
+            maximum = value
+          }
+        }
+      }
+      Ok([minimum, maximum])
+    }
+  }
+}

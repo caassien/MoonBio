@@ -30,3 +30,15 @@ test "reject_invalid_fastq_quality_length" {
   let fastq = "@read1\nGATTACA\n+\nIIIIII\n"
   assert_eq(parse_fastq(fastq) is Err(_), true)
 }
+
+///|
+test "fasta_gc_percent_ignores_ambiguous_bases" {
+  let fasta = ">seq1\nGCGTNNAA\n"
+  assert_eq(fasta_gc_percent(fasta).unwrap(), 50)
+}
+
+///|
+test "fastq_quality_range" {
+  let fastq = "@read1\nGATT\n+\n!I!I\n@read2\nGGTT\n+\nHHHH\n"
+  assert_eq(fastq_quality_range(fastq).unwrap(), [0, 40])
+}

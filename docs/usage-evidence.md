@@ -75,6 +75,7 @@ powershell -ExecutionPolicy Bypass -File .\scripts\verify_acceptance.ps1
 - README / LICENSE / CI / 申报书 / 自查文档
 - 当前分支、提交数量、远程默认分支
 - 有效 MoonBit 文件数量与行数
+- 源码规模仅统计版本库中的 `.mbt` 实现文件，不把生成的 `.mbti` 接口文件计入
 - `moon info`、`git diff --exit-code`
 
 ## 6. Mooncakes 发布验证

@@ -3,8 +3,9 @@ import {
   "caassien/moonbio/src/parser",
 }
 
+pkgtype(kind: "executable")
+
 options(
-  is_main: true,
   link: {
     "wasm": {
       "exports": [

@@ -6,7 +6,11 @@ import {
 }
 
 // Values
+pub fn fasta_gc_percent(String) -> Result[Int, String]
+
 pub fn fasta_summary(String) -> Result[FastaStats, String]
+
+pub fn fastq_quality_range(String) -> Result[Array[Int], String]
 
 pub fn fastq_summary(String) -> Result[FastqStats, String]
 
