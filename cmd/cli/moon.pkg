@@ -1,5 +1,8 @@
 import {
   "caassien/moonbio",
+  "caassien/moonbio/src/benchmark",
 }
 
-pkgtype(kind: "executable")
+options(
+  is_main: true,
+)

@@ -15,16 +15,27 @@ function Get-RemoteHeadBranch([string]$remoteName) {
 }
 
 function Get-MoonBitMetrics {
-  $files = git ls-files | Where-Object { $_ -match "\.mbt$" }
-  $lineCount = 0
+  $files = Get-ChildItem -Path . -Recurse -File -Filter *.mbt |
+    Where-Object { $_.FullName -notmatch "[\\/](_build|\.git)[\\/]" }
+  $implementationFiles = @($files | Where-Object { $_.Name -notmatch "_test\.mbt$" })
+  $testFiles = @($files | Where-Object { $_.Name -match "_test\.mbt$" })
+  $implementationLines = 0
+  $totalLines = 0
   foreach ($file in $files) {
-    if (Test-Path $file) {
-      $lineCount += (Get-Content $file | Measure-Object -Line).Lines
+    $count = (Get-Content -LiteralPath $file.FullName | Measure-Object -Line).Lines
+    $totalLines += $count
+    if ($file.Name -notmatch "_test\.mbt$") {
+      $implementationLines += $count
     }
   }
   [PSCustomObject]@{
-    FileCount = $files.Count
-    LineCount = $lineCount
+    FileCount = @($files).Count
+    TestFileCount = $testFiles.Count
+    PackageCount = @(Get-ChildItem -Path . -Recurse -File -Filter moon.pkg |
+      Where-Object { $_.FullName -notmatch "[\\/](_build|\.git)[\\/]" }).Count
+    ImplementationFileCount = $implementationFiles.Count
+    ImplementationLines = $implementationLines
+    TotalLines = $totalLines
   }
 }
 
@@ -42,12 +53,15 @@ $requiredFiles = @(
   "source-attribution.md",
   "submission-status.md",
   "docs/usage-evidence.md",
+  "docs/benchmarks.md",
+  "docs/data/reference_sequences.fasta",
+  "docs/data/reference_reads.fastq",
   "scripts/verify_acceptance.ps1"
 )
 
 $missing = @()
 foreach ($path in $requiredFiles) {
-  if (-not (Test-Path $path)) {
+  if (-not (Test-Path -LiteralPath $path)) {
     $missing += $path
   }
 }
@@ -62,27 +76,40 @@ Write-Host "MoonBio compliance summary"
 Write-Host "  branch: $currentBranch"
 Write-Host "  commits: $commitCount"
 Write-Host "  moonbit files: $($metrics.FileCount)"
-Write-Host "  moonbit lines: $($metrics.LineCount)"
+Write-Host "  test files: $($metrics.TestFileCount)"
+Write-Host "  packages: $($metrics.PackageCount)"
+Write-Host "  implementation files: $($metrics.ImplementationFileCount)"
+Write-Host "  implementation lines: $($metrics.ImplementationLines)"
+Write-Host "  total MoonBit lines: $($metrics.TotalLines)"
 Write-Host "  origin HEAD: $originHead"
 Write-Host "  gitlink HEAD: $gitlinkHead"
 
 if ($missing.Count -gt 0) {
-  Write-Error ("Missing required files: " + ($missing -join ", "))
+  throw ("Missing required files: " + ($missing -join ", "))
+}
+
+$licenseText = Get-Content -Raw -Encoding utf8 LICENSE
+if ($licenseText -notmatch "MIT License") {
+  throw "LICENSE does not identify the MIT License."
+}
+
+if ($metrics.ImplementationLines -lt 3500) {
+  throw "Implementation MoonBit LOC is $($metrics.ImplementationLines), below the 3500-line acceptance threshold."
+}
+
+if ($metrics.PackageCount -lt 7) {
+  throw "Expected at least 7 MoonBit packages, found $($metrics.PackageCount)."
 }
 
 if ($commitCount -lt 10) {
   Write-Warning "Commit history is still shallow for a public competition repo."
 }
 
-if ($metrics.LineCount -lt 400) {
-  Write-Warning "Effective MoonBit LOC is still modest; keep expanding substantive code."
-}
-
-if ($originHead -ne "main") {
+if ($originHead -ne $null -and $originHead -ne "main") {
   Write-Warning "GitHub default branch is not main."
 }
 
-if ($null -ne $gitlinkHead -and $gitlinkHead -ne "main") {
+if ($gitlinkHead -ne $null -and $gitlinkHead -ne "main") {
   Write-Warning "GitLink default branch is not main yet."
 }
 

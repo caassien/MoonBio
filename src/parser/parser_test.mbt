@@ -38,7 +38,25 @@ test "fasta_gc_percent_ignores_ambiguous_bases" {
 }
 
 ///|
+test "fasta_filter_by_length_preserves_order_and_metadata" {
+  let fasta = ">short\nAC\n>medium\nACGT\n>long\nACGTAC\n"
+  let filtered = filter_fasta_by_length(fasta, 3, 5).unwrap()
+  assert_eq(filtered.length(), 1)
+  assert_eq(filtered[0].id, "medium")
+  assert_eq(filtered[0].sequence, "ACGT")
+}
+
+///|
+test "fasta_filter_rejects_invalid_ranges" {
+  let fasta = ">seq\nACGT\n"
+  assert_eq(filter_fasta_by_length(fasta, -1, 4) is Err(_), true)
+  assert_eq(filter_fasta_by_length(fasta, 5, 4) is Err(_), true)
+}
+
+///|
 test "fastq_quality_range" {
   let fastq = "@read1\nGATT\n+\n!I!I\n@read2\nGGTT\n+\nHHHH\n"
-  assert_eq(fastq_quality_range(fastq).unwrap(), [0, 40])
+  let range = fastq_quality_range(fastq).unwrap()
+  assert_eq(range[0], 0)
+  assert_eq(range[1], 40)
 }

@@ -8,15 +8,35 @@ import {
 // Values
 pub fn fasta_gc_percent(String) -> Result[Int, String]
 
+pub fn fasta_length_summary(String) -> Result[LengthSummary, String]
+
+pub fn fasta_n50(String) -> Result[Int, String]
+
+pub fn fasta_n_fraction(String) -> Result[Int, String]
+
 pub fn fasta_summary(String) -> Result[FastaStats, String]
+
+pub fn fasta_symbol_summary(String) -> Result[SymbolSummary, String]
+
+pub fn fastq_length_histogram(String) -> Result[Array[Int], String]
+
+pub fn fastq_length_summary(String) -> Result[LengthSummary, String]
+
+pub fn fastq_n_fraction(String) -> Result[Int, String]
 
 pub fn fastq_quality_range(String) -> Result[Array[Int], String]
 
 pub fn fastq_summary(String) -> Result[FastqStats, String]
 
+pub fn fastq_symbol_summary(String) -> Result[SymbolSummary, String]
+
+pub fn filter_fasta_by_length(String, Int, Int) -> Result[Array[FastaRecord], String]
+
 pub fn parse_fasta(String) -> Result[Array[FastaRecord], String]
 
 pub fn parse_fastq(String) -> Result[Array[FastqRecord], String]
+
+pub fn validate_unique_fasta_ids(String) -> Result[Unit, String]
 
 // Errors
 
@@ -44,6 +64,24 @@ pub struct FastqStats {
   total_bases : Int
   min_length : Int
   max_length : Int
+} derive(Eq, @debug.Debug)
+
+pub struct LengthSummary {
+  record_count : Int
+  total_bases : Int
+  minimum_length : Int
+  maximum_length : Int
+  n50 : Int
+} derive(Eq, @debug.Debug)
+
+pub struct SymbolSummary {
+  a : Int
+  c : Int
+  g : Int
+  t : Int
+  n : Int
+  other : Int
+  total : Int
 } derive(Eq, @debug.Debug)
 
 // Type aliases

@@ -6,6 +6,18 @@ import {
 }
 
 // Values
+pub fn aligned_reference_coordinates(String, Int) -> Result[Array[Int], String]
+
+pub fn alignment_cigar(String, String) -> Result[String, String]
+
+pub fn alignment_coverage_percent(String) -> Result[Int, String]
+
+pub fn alignment_edit_distance(String, String) -> Result[Int, String]
+
+pub fn alignment_identity(String, String) -> Result[Int, String]
+
+pub fn alignment_mismatch_positions(String, String) -> Result[Array[Int], String]
+
 pub fn levenshtein_distance(String, String) -> Int
 
 pub fn min(Int, Int) -> Int
@@ -16,7 +28,15 @@ pub fn progressive_msa(Array[String], Int, Int, Int) -> Array[String]
 
 pub fn progressive_msa_result(Array[String], Int, Int, Int) -> MsaResult
 
+pub fn score_alignment(String, String, Int, Int, Int) -> Result[Int, String]
+
 pub fn smith_waterman(String, String, Int, Int, Int) -> AlignmentResult
+
+pub fn summarize_alignment(String, String) -> Result[AlignmentSummary, String]
+
+pub fn ungap(String) -> Result[String, String]
+
+pub fn validate_alignment(String, String) -> Result[Unit, String]
 
 // Errors
 
@@ -26,6 +46,16 @@ pub struct AlignmentResult {
   alignment_a : String
   alignment_b : String
 }
+
+pub struct AlignmentSummary {
+  columns : Int
+  matches : Int
+  mismatches : Int
+  insertions : Int
+  deletions : Int
+  identity_percent : Int
+  edit_distance : Int
+} derive(Eq, @debug.Debug)
 
 pub struct MsaResult {
   aligned_sequences : Array[String]

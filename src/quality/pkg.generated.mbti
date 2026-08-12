@@ -1,0 +1,113 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "caassien/moonbio/src/quality"
+
+import {
+  "moonbitlang/core/debug",
+}
+
+// Values
+pub fn fastq_has_uniform_length(String) -> Result[Bool, String]
+
+pub fn fastq_quality_summary(String, Int) -> Result[FastqQualitySummary, String]
+
+pub fn filter_fastq(String, Int, Int) -> Result[FilterSummary, String]
+
+pub fn low_quality_base_fraction(String, Int) -> Result[Int, String]
+
+pub fn low_quality_windows(String, Int, Int) -> Result[Array[Int], String]
+
+pub fn mean_quality(String) -> Result[Int, String]
+
+pub fn n_base_count(String) -> Int
+
+pub fn per_read_quality_report(String, Int) -> Result[Array[ReadQualityRecord], String]
+
+pub fn phred_error_probability(String) -> Result[Int, String]
+
+pub fn phred_values(String) -> Result[Array[Int], String]
+
+pub fn position_quality_profile(String) -> Result[Array[Int], String]
+
+pub fn quality_distribution(String) -> Result[QualityDistribution, String]
+
+pub fn quality_filter_config(Int, Int) -> Result[QualityFilterConfig, String]
+
+pub fn quality_pass_rate(String, Int) -> Result[Int, String]
+
+pub fn quality_range(String) -> Result[Array[Int], String]
+
+pub fn quality_window_passes(String, Int, Int) -> Result[Array[Bool], String]
+
+pub fn quality_window_profile(String, Int) -> Result[Array[QualityWindowStatistic], String]
+
+pub fn read_pass_mask(String, Int) -> Result[Array[Bool], String]
+
+pub fn trim_fastq_quality(String, Int) -> Result[Array[TrimmedRead], String]
+
+pub fn trim_quality(String, String, Int) -> Result[TrimmedRead, String]
+
+// Errors
+
+// Types and methods
+pub struct FastqQualitySummary {
+  read_count : Int
+  passed_reads : Int
+  failed_reads : Int
+  total_bases : Int
+  passed_bases : Int
+  n_bases : Int
+  mean_quality : Int
+  low_quality_bases : Int
+} derive(@debug.Debug)
+
+pub struct FilterSummary {
+  total_reads : Int
+  passed_reads : Int
+  failed_reads : Int
+  total_bases : Int
+  passed_bases : Int
+} derive(Eq, @debug.Debug)
+
+pub struct QualityDistribution {
+  counts : Array[Int]
+  minimum : Int
+  maximum : Int
+  total : Int
+} derive(@debug.Debug)
+
+pub struct QualityFilterConfig {
+  minimum_length : Int
+  minimum_mean_quality : Int
+} derive(Eq, @debug.Debug)
+
+pub struct QualityWindowStatistic {
+  start : Int
+  end : Int
+  mean_quality : Int
+  minimum_quality : Int
+  maximum_quality : Int
+  low_quality_bases : Int
+} derive(Eq, @debug.Debug)
+
+pub struct ReadQualityRecord {
+  id : String
+  length : Int
+  mean_quality : Int
+  minimum_quality : Int
+  maximum_quality : Int
+  n_bases : Int
+  passed : Bool
+} derive(Eq, @debug.Debug)
+
+pub struct TrimmedRead {
+  sequence : String
+  quality : String
+  left_trim : Int
+  right_trim : Int
+  retained_length : Int
+} derive(@debug.Debug)
+
+// Type aliases
+
+// Traits
+

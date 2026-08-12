@@ -1,0 +1,42 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "caassien/moonbio/src/benchmark"
+
+import {
+  "moonbitlang/core/debug",
+}
+
+// Values
+pub fn reference_fastq() -> String
+
+pub fn reference_sequence_count() -> Int
+
+pub fn reference_sequences() -> Array[BenchmarkSequence]
+
+pub fn run_benchmark(String) -> Result[BenchmarkReport, String]
+
+pub fn total_reference_bases() -> Int
+
+// Errors
+
+// Types and methods
+pub struct BenchmarkReport {
+  sequence_count : Int
+  total_bases : Int
+  average_gc_percent : Int
+  total_motif_hits : Int
+  alignment_identity_percent : Int
+  alignment_cigar : String
+  quality_total_reads : Int
+  quality_passed_reads : Int
+} derive(Eq, @debug.Debug)
+
+pub struct BenchmarkSequence {
+  name : String
+  sequence : String
+  source : String
+} derive(Eq, @debug.Debug)
+
+// Type aliases
+
+// Traits
+

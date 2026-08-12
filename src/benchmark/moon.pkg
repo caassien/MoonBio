@@ -1,0 +1,9 @@
+import {
+  "caassien/moonbio/src/align",
+  "caassien/moonbio/src/quality",
+  "caassien/moonbio/src/sequence",
+}
+
+options(
+  is_main: false,
+)

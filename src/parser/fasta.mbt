@@ -190,3 +190,32 @@ pub fn fasta_gc_percent(content : String) -> Result[Int, String] {
     }
   }
 }
+
+///|
+/// Select FASTA records by inclusive sequence length bounds while preserving
+/// input order and record identifiers.
+pub fn filter_fasta_by_length(
+  content : String,
+  minimum_length : Int,
+  maximum_length : Int,
+) -> Result[Array[FastaRecord], String] {
+  if minimum_length < 0 || maximum_length < 0 {
+    return Err("FASTA length bounds cannot be negative")
+  }
+  if minimum_length > maximum_length {
+    return Err("FASTA minimum length cannot exceed maximum length")
+  }
+  match parse_fasta(content) {
+    Err(msg) => Err(msg)
+    Ok(records) => {
+      let selected = []
+      for record in records {
+        let length = record.sequence.length()
+        if length >= minimum_length && length <= maximum_length {
+          selected.push(record)
+        }
+      }
+      Ok(selected)
+    }
+  }
+}

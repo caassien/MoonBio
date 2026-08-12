@@ -1,35 +1,32 @@
 # Submission Status
 
-更新日期：2026-08-06
+更新日期：2026-08-12
 
-## 针对预验收意见的整改状态
+## 本轮本地整改状态
 
-- [x] 统一到 MoonBit `0.10.3` 兼容命令集，并迁移 executable 包配置到 `pkgtype`
-- [x] 按 MoonBit 社区模板重做 GitHub Actions CI，覆盖三平台与 all targets
-- [x] 补强 FASTA / FASTQ 解析与统计
-- [x] 补强渐进式 MSA
-- [x] 补充 CLI / WASM 演示入口
-- [x] 补充 README、来源说明、官方要求映射、自查脚本
-- [x] 补充解析器、MSA、引擎层测试与 GC/质量范围边界测试
-- [x] 补充可复现的正确性边界与性能模型文档
-- [ ] GitLink 默认分支与 GitHub 默认分支完全统一
-- [x] Mooncakes 身份链路复核完成
-- [x] Mooncakes `0.1.1` 正式发布
-- [x] Mooncakes `0.1.2` 整改版本发布
+- [x] 兼容 MoonBit 0.10.3；`cmd/cli` 和 `cmd/wasm` 使用 `options(is_main: true)`，不依赖 0.10.4 才有的包配置键。
+- [x] 保留并强化 GitHub Actions CI：MoonBit 安装、依赖更新、全目标检查、测试、格式化、接口生成和合规脚本。
+- [x] 扩充 `src/sequence`：IUPAC、窗口统计、突变分类、共识、ORF、翻译、限制性位点和低复杂度处理。
+- [x] 扩充 `src/parser`：FASTA/FASTQ 边界、N50、长度直方图、重复 ID、碱基组成和 N 比例。
+- [x] 扩充 `src/align`：CIGAR、identity、编辑距离、比对摘要、评分和参考坐标映射。
+- [x] 扩充 `src/quality`：Phred 分布、逐位画像、窗口画像、trimming、过滤、逐读报告和 pass mask。
+- [x] 增加 `src/benchmark` 和 `docs/data/`，使用 NCBI accession 可追溯的离线参考窗口。
+- [x] 增加真实边界测试、负例测试、质量测试和确定性基准断言。
+- [x] 实现代码达到 3500 行以上；验收脚本同时报告实现行数和含测试总行数。
+- [x] README、许可证、来源说明、使用说明、基准说明和官方要求映射已同步更新。
+- [ ] 本轮尚未推送 GitHub、GitLink 或 Mooncakes；等待用户后续明确发布指令。
 
-## 当前已确认状态
+## 当前本地审计口径
 
-- GitHub 仓库默认分支：`main`
-- GitLink 远程当前 `HEAD` 仍指向：`master`，但 `main` 与 GitHub 当前提交一致
-- 本地当前工作分支：`main`
-- CI 固定安装：`0.10.3`；本机复核工具链当前为 `moonc v0.10.4`
-- Mooncakes 当前登录身份：`caassien`
-- `0.1.0` 已存在于 Mooncakes，整改版本需使用新版本号发布
-- Mooncakes 已成功发布版本：`caassien/moonbio@0.1.1`
-- 已发布整改版本：`caassien/moonbio@0.1.2`
+- 工作分支：`main`（本轮只做本地修改）。
+- 工具链目标：MoonBit `0.10.3`。
+- 远程写操作：无；本轮不会执行 `git push` 或 `moon publish`。
+- 作者身份：后续若用户要求提交或推送，必须先核对 GitHub/GitLink/Mooncakes 登录身份和提交邮箱。
 
-## 下一步收尾
+## 验收入口
 
-1. 在带 C 编译器的环境跑完整自查脚本（含 native 目标）与 `moon publish --dry-run`。
-2. 同步 GitHub / GitLink 最新提交。
-3. 如果 GitLink 页面仍将默认分支指向 `master`，在网页设置中切换为 `main`。
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\verify_acceptance.ps1
+```
+
+详细证据见 [docs/usage-evidence.md](docs/usage-evidence.md)，基准和来源见 [docs/benchmarks.md](docs/benchmarks.md) 与 [source-attribution.md](source-attribution.md)。

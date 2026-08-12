@@ -26,4 +26,14 @@ fn main {
   let fastq_demo = "@read1\nGATTACA\n+\nIIIIIII\n@read2\nGACTATA\n+\nHHHHHHH\n"
   print_result("FASTA summary: ", engine.summarize_fasta(fasta_demo))
   print_result("FASTQ summary: ", engine.summarize_fastq(fastq_demo))
+
+  match @benchmark.run_benchmark("ATG") {
+    Ok(report) =>
+      println(
+        "Benchmark: references=\{report.sequence_count};bases=\{report.total_bases};" +
+        "motif_hits=\{report.total_motif_hits};identity=\{report.alignment_identity_percent}%" +
+        ";quality_passed=\{report.quality_passed_reads}/\{report.quality_total_reads}",
+      )
+    Err(message) => println("Benchmark error: \{message}")
+  }
 }

@@ -30,6 +30,9 @@ Invoke-Step "Static check" { moon check --target all }
 Invoke-Step "Test wasm" { moon test --target wasm }
 Invoke-Step "Test wasm-gc" { moon test --target wasm-gc }
 Invoke-Step "Test js" { moon test --target js }
+Invoke-Step "Test benchmark package" { moon test src/benchmark --target wasm }
+Invoke-Step "Build WASM demo" { moon build --target wasm-gc cmd/wasm }
+Invoke-Step "Run CLI demo" { moon run cmd/cli }
 
 $compilerAvailable = Test-CompilerAvailable
 if ($RequireNative -or $compilerAvailable) {

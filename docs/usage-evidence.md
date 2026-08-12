@@ -1,93 +1,73 @@
 # Usage Evidence
 
-本文档记录 MoonBio 当前用于验收的运行方式与关键证据点。
+本文档给出评委可以直接复制执行的本地验收路径。所有命令默认在仓库根目录执行，工具链为 MoonBit 0.10.3。
 
-## 1. 代码格式与静态检查
+## 一键验收
 
 ```powershell
-moon fmt --check
-moon check --target all
+powershell -ExecutionPolicy Bypass -File .\scripts\verify_acceptance.ps1
 ```
 
-目的：
+脚本依次执行：版本确认、依赖更新、格式检查、全目标静态检查、多后端测试、接口生成、代码规模检查和工作树检查。无 C 编译器时 native 目标会明确说明跳过；使用 `-RequireNative` 时则会把缺失编译器视为失败。
 
-- 验证仓库格式一致。
-- 验证多目标静态检查通过。
-
-## 2. 测试
+## 分步命令
 
 ```powershell
+moon version --all
+moon update
+moon fmt --check
+moon check --target all
 moon test --target wasm
 moon test --target wasm-gc
 moon test --target js
+moon info
 ```
 
-本地若存在 C 编译器：
+有 C 编译器时：
 
 ```powershell
 moon test --target native
 ```
 
-当前测试覆盖：
+分包回归：
 
-- DNA 解析、转录、反向互补
-- HMM Viterbi 示例
-- Needleman-Wunsch / Smith-Waterman / Levenshtein
-- 渐进式 MSA 结果长度一致性
-- FASTA / FASTQ 解析与统计
-- 引擎层整合调用
+```powershell
+moon test src/parser --target wasm
+moon test src/sequence --target wasm
+moon test src/align --target wasm
+moon test src/quality --target wasm
+moon test src/benchmark --target wasm
+```
 
-## 3. CLI 示例
+## 可见示例
 
 ```powershell
 moon run cmd/cli
-```
-
-预期可观察到：
-
-- 全局比对得分与对齐结果
-- MSA 共识序列
-- FASTA / FASTQ 统计摘要
-
-## 4. WASM 构建
-
-```powershell
 moon build --target wasm-gc cmd/wasm
 ```
 
-当前产物：
+CLI 会输出全局比对、MSA、FASTA/FASTQ 摘要和离线参考基准。WASM 入口在 `cmd/wasm/main.mbt`，构建产物通常位于 `_build/wasm-gc/debug/build/cmd/wasm/wasm.wasm`。
 
-- `_build/wasm-gc/debug/build/cmd/wasm/wasm.wasm`
-
-当前导出入口源码位于：
-
-- `cmd/wasm/main.mbt`
-
-## 5. 仓库自查
+## 代码规模与合规
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File .\scripts\check_repo_compliance.ps1
-powershell -ExecutionPolicy Bypass -File .\scripts\verify_acceptance.ps1
 ```
 
-检查项包括：
+该脚本只统计 Git 版本库中的 `.mbt` 文件，分别报告：
 
-- README / LICENSE / CI / 申报书 / 自查文档
-- 当前分支、提交数量、远程默认分支
-- 有效 MoonBit 文件数量与行数
-- 源码规模仅统计版本库中的 `.mbt` 实现文件，不把生成的 `.mbti` 接口文件计入
-- `moon info`、`git diff --exit-code`
+- 实现文件行数（排除 `_test.mbt`）；
+- 含测试的总 MoonBit 行数；
+- 包数量、测试文件数量、CI 和许可证；
+- 当前分支、提交数和远程默认分支（只读检查）。
 
-## 6. Mooncakes 发布验证
+脚本将实现代码 3500 行作为硬性门槛，并检查 `docs/data/`、来源说明、README、LICENSE 和验收文档是否存在。
+
+## 发布前检查
+
+本轮任务只做本地实现，不执行推送、发布或身份切换。未来需要发布时，必须由仓库创建者确认登录身份后再单独执行：
 
 ```powershell
 moon whoami
 moon publish --dry-run
-moon publish
 ```
-
-当前已确认：
-
-- 登录身份为 `caassien`
-- `caassien/moonbio@0.1.1` 已成功发布
-- 整改后版本使用 `caassien/moonbio@0.1.2`，发布前执行 `moon publish --dry-run`

@@ -1,0 +1,7 @@
+import {
+  "caassien/moonbio/src/parser",
+}
+
+options(
+  is_main: false,
+)

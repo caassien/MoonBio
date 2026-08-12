@@ -1,0 +1,188 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "caassien/moonbio/src/sequence"
+
+import {
+  "moonbitlang/core/debug",
+}
+
+// Values
+pub fn ambiguous_percent(String) -> Result[Int, String]
+
+pub fn at_percent(String) -> Result[Int, String]
+
+pub fn base_counts(String) -> Result[BaseCounts, String]
+
+pub fn canonical_positions(String, Char) -> Result[Array[Int], String]
+
+pub fn coding_report(String, Int) -> Result[CodingReport, String]
+
+pub fn codon_to_amino(String) -> Result[String, String]
+
+pub fn codon_usage(String, Int) -> Result[Array[CodonUsage], String]
+
+pub fn consensus_sequence(Array[String], Int) -> Result[String, String]
+
+pub fn digest_fragments(String, String) -> Result[Array[Int], String]
+
+pub fn find_motif(String, String, Bool) -> Result[Array[MotifHit], String]
+
+pub fn find_orfs(String, Int) -> Result[Array[Orf], String]
+
+pub fn find_restriction_sites(String, String) -> Result[Array[RestrictionSite], String]
+
+pub fn gc_distance(String, String) -> Result[Int, String]
+
+pub fn gc_percent(String) -> Result[Int, String]
+
+pub fn gc_windows(String, Int, Int) -> Result[Array[WindowStatistic], String]
+
+pub fn hamming_distance(String, String) -> Result[Int, String]
+
+pub fn has_only_canonical_bases(String) -> Result[Bool, String]
+
+pub fn homopolymer_runs(String, Int) -> Result[Array[HomopolymerRun], String]
+
+pub fn is_palindromic_site(String) -> Result[Bool, String]
+
+pub fn kmer_count(String, String) -> Result[Int, String]
+
+pub fn kmer_counts(String, Int) -> Result[Array[KmerCount], String]
+
+pub fn mask_low_complexity(String, Int, Int) -> Result[String, String]
+
+pub fn minimizer_sketch(String, Int, Int) -> Result[Array[String], String]
+
+pub fn mismatch_positions(String, String) -> Result[Array[Int], String]
+
+pub fn motif_density(String, String) -> Result[Int, String]
+
+pub fn mutation_profile(String, String) -> Result[MutationProfile, String]
+
+pub fn normalize_dna(String) -> Result[String, String]
+
+pub fn orf_count(String, Int) -> Result[Int, String]
+
+pub fn pairwise_identity_matrix(Array[String]) -> Result[Array[Array[Int]], String]
+
+pub fn restriction_enzyme_names() -> Array[String]
+
+pub fn restriction_site_count(String, String) -> Result[Int, String]
+
+pub fn reverse_complement(String) -> Result[String, String]
+
+pub fn reverse_complement_many(Array[String]) -> Result[Array[String], String]
+
+pub fn sequence_complexity(String, Int) -> Result[Int, String]
+
+pub fn sequence_length(String) -> Result[Int, String]
+
+pub fn total_kmers(String, Int) -> Result[Int, String]
+
+pub fn transcribe(String) -> Result[String, String]
+
+pub fn translate(String, Int) -> Result[TranslationResult, String]
+
+pub fn translate_all_frames(String) -> Result[Array[TranslationResult], String]
+
+pub fn unique_kmer_count(String, Int) -> Result[Int, String]
+
+pub fn validate_dna(String) -> Result[Unit, String]
+
+pub fn validate_iupac(String) -> Result[Unit, String]
+
+// Errors
+
+// Types and methods
+pub struct BaseCounts {
+  a : Int
+  c : Int
+  g : Int
+  t : Int
+  ambiguous : Int
+  invalid : Int
+  total : Int
+} derive(Eq, @debug.Debug)
+
+pub struct CodingReport {
+  frame : Int
+  codons_read : Int
+  start_codons : Int
+  stop_codons : Int
+  gc_percent : Int
+  protein : String
+} derive(Eq, @debug.Debug)
+
+pub struct CodonUsage {
+  codon : String
+  amino : String
+  count : Int
+  fraction_percent : Int
+} derive(Eq, @debug.Debug)
+
+pub struct HomopolymerRun {
+  base : String
+  start : Int
+  length : Int
+} derive(Eq, @debug.Debug)
+
+pub struct KmerCount {
+  kmer : String
+  count : Int
+} derive(Eq, @debug.Debug)
+
+pub struct MotifHit {
+  start : Int
+  end : Int
+  matched : String
+} derive(Eq, @debug.Debug)
+
+pub struct MutationProfile {
+  matches : Int
+  mismatches : Int
+  transitions : Int
+  transversions : Int
+  ambiguous : Int
+} derive(Eq, @debug.Debug)
+
+pub struct Orf {
+  start : Int
+  end : Int
+  frame : Int
+  strand : String
+  protein : String
+} derive(Eq, @debug.Debug)
+
+pub struct RestrictionEnzyme {
+  name : String
+  pattern : String
+  cut_offset : Int
+} derive(Eq, @debug.Debug)
+
+pub struct RestrictionSite {
+  enzyme : String
+  pattern : String
+  start : Int
+  end : Int
+  cut : Int
+} derive(Eq, @debug.Debug)
+
+pub struct TranslationResult {
+  protein : String
+  stop_found : Bool
+  codons_read : Int
+  frame : Int
+} derive(Eq, @debug.Debug)
+
+pub struct WindowStatistic {
+  start : Int
+  end : Int
+  gc_percent : Int
+  canonical_bases : Int
+  ambiguous_bases : Int
+  unique_kmers : Int
+} derive(Eq, @debug.Debug)
+
+// Type aliases
+
+// Traits
+
