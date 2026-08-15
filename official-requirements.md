@@ -15,7 +15,7 @@
 
 ### `moon.pkg` 与格式检查
 
-本仓库按 MoonBit 0.10.3 兼容语法维护。当前验收命令使用：
+本仓库按 MoonBit 0.10.3 兼容语法维护，CI 固定使用 `0.10.3+16975d007` 构建。当前验收命令使用：
 
 ```powershell
 moon fmt --check
@@ -27,7 +27,7 @@ moon info
 
 ### CI
 
-`.github/workflows/ci.yml` 固定安装 MoonBit 0.10.3，覆盖 Ubuntu、macOS、Windows，执行依赖更新、全目标检查、测试、格式化 diff、接口生成和合规脚本。工作流使用 `persist-credentials: false`，不把推送权限注入构建任务。
+`.github/workflows/ci.yml` 固定安装 MoonBit `0.10.3+16975d007`，对工具链和 Core 归档执行 SHA-256 校验并缓存，覆盖 Ubuntu、macOS、Windows，执行依赖更新、全目标检查、测试、格式化 diff、接口生成和合规脚本。工作流使用 `persist-credentials: false`，不把推送权限注入构建任务。
 
 ### 功能深度
 

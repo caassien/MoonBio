@@ -52,7 +52,7 @@ MoonBio 是面向 MoonBit 生态的可复用生物信息学基础库。项目覆
 
 ## 快速开始
 
-需要 MoonBit 工具链 `0.10.3`（`moonc v0.10.3`）。
+需要 MoonBit 工具链 `0.10.3+16975d007`（`moonc v0.10.3`）。CI 使用同一固定构建，并校验官方社区归档的 SHA-256；本地安装可使用 MoonBit 官方安装器安装 0.10.3。
 
 ```bash
 git clone https://github.com/caassien/MoonBio.git
@@ -120,6 +120,7 @@ powershell -ExecutionPolicy Bypass -File .\scripts\check_repo_compliance.ps1
 - [正确性与基准](docs/benchmarks.md)
 - [来源与开源合规](source-attribution.md)
 - [一页项目说明](proposal-one-page.md)
+- [变更日志](CHANGELOG.md)
 
 ## License
 

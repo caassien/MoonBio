@@ -16,7 +16,20 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
+        include:
+          # macos-14 is the arm64 standard runner matching the pinned archive.
+          - os: ubuntu-latest
+            archive: x86_64-unknown-linux.tar.gz
+          - os: macos-14
+            archive: aarch64-apple-darwin.tar.gz
+          - os: windows-latest
+            archive: x86_64-pc-windows.zip
+
+    env:
+      # The short 0.10.3 CDN path now returns 403.  This immutable build is
+      # the 0.10.3 toolchain requested by the OSC2026 acceptance checklist.
+      MOONBIT_VERSION: 0.10.3+16975d007
+      MOONBIT_RELEASE_URL: https://github.com/chawyehsu/moonbit-binaries/releases/download/v0.10.3%2B16975d007
 
     steps:
       - name: Checkout
@@ -40,12 +53,80 @@ jobs:
           update: true
           install: mingw-w64-ucrt-x86_64-gcc
 
-      - name: Setup MoonBit 0.10.3
-        uses: hustcer/setup-moonbit@v1
+      - name: Cache MoonBit 0.10.3 toolchain
+        id: moonbit-cache
+        uses: actions/cache@v4
         with:
-          version: 0.10.3
+          path: ~/.moon
+          key: moonbit-${{ runner.os }}-${{ env.MOONBIT_VERSION }}
+
+      - name: Install MoonBit 0.10.3 (Unix)
+        if: runner.os != 'Windows' && steps.moonbit-cache.outputs.cache-hit != 'true'
+        shell: bash
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          MOONBIT_ARCHIVE: moonbit-v${{ env.MOONBIT_VERSION }}-${{ matrix.archive }}
+        run: |
+          set -euo pipefail
+          mkdir -p "$HOME/.moon/lib"
+          archive="$RUNNER_TEMP/$MOONBIT_ARCHIVE"
+          checksum="$archive.sha256"
+          curl --fail --location --retry 5 --retry-all-errors \
+            "$MOONBIT_RELEASE_URL/$MOONBIT_ARCHIVE" --output "$archive"
+          curl --fail --location --retry 5 --retry-all-errors \
+            "$MOONBIT_RELEASE_URL/$MOONBIT_ARCHIVE.sha256" --output "$checksum"
+          expected="$(awk '{print $1}' "$checksum")"
+          actual="$(shasum -a 256 "$archive" | awk '{print $1}')"
+          test "$expected" = "$actual"
+          tar -xzf "$archive" --directory "$HOME/.moon"
+
+          core="$RUNNER_TEMP/moonbit-core-v$MOONBIT_VERSION-universal.zip"
+          core_checksum="$core.sha256"
+          curl --fail --location --retry 5 --retry-all-errors \
+            "$MOONBIT_RELEASE_URL/moonbit-core-v$MOONBIT_VERSION-universal.zip" \
+            --output "$core"
+          curl --fail --location --retry 5 --retry-all-errors \
+            "$MOONBIT_RELEASE_URL/moonbit-core-v$MOONBIT_VERSION-universal.zip.sha256" \
+            --output "$core_checksum"
+          expected="$(awk '{print $1}' "$core_checksum")"
+          actual="$(shasum -a 256 "$core" | awk '{print $1}')"
+          test "$expected" = "$actual"
+          unzip -q -o "$core" -d "$HOME/.moon/lib"
+
+      - name: Install MoonBit 0.10.3 (Windows)
+        if: runner.os == 'Windows' && steps.moonbit-cache.outputs.cache-hit != 'true'
+        shell: pwsh
+        env:
+          MOONBIT_ARCHIVE: moonbit-v${{ env.MOONBIT_VERSION }}-${{ matrix.archive }}
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $moonHome = Join-Path $env:USERPROFILE '.moon'
+          New-Item -ItemType Directory -Force (Join-Path $moonHome 'lib') | Out-Null
+          $archive = Join-Path $env:RUNNER_TEMP $env:MOONBIT_ARCHIVE
+          $checksum = "$archive.sha256"
+          Invoke-WebRequest -Uri "$env:MOONBIT_RELEASE_URL/$env:MOONBIT_ARCHIVE" -OutFile $archive
+          Invoke-WebRequest -Uri "$env:MOONBIT_RELEASE_URL/$env:MOONBIT_ARCHIVE.sha256" -OutFile $checksum
+          $expected = (Get-Content $checksum -Raw).Trim().Split([char[]]" 	")[0].ToLowerInvariant()
+          $actual = (Get-FileHash $archive -Algorithm SHA256).Hash.ToLowerInvariant()
+          if ($expected -ne $actual) { throw "MoonBit archive checksum mismatch" }
+          Expand-Archive -Path $archive -DestinationPath $moonHome -Force
+
+          $core = Join-Path $env:RUNNER_TEMP "moonbit-core-v$env:MOONBIT_VERSION-universal.zip"
+          $coreChecksum = "$core.sha256"
+          Invoke-WebRequest -Uri "$env:MOONBIT_RELEASE_URL/moonbit-core-v$env:MOONBIT_VERSION-universal.zip" -OutFile $core
+          Invoke-WebRequest -Uri "$env:MOONBIT_RELEASE_URL/moonbit-core-v$env:MOONBIT_VERSION-universal.zip.sha256" -OutFile $coreChecksum
+          $expected = (Get-Content $coreChecksum -Raw).Trim().Split([char[]]" 	")[0].ToLowerInvariant()
+          $actual = (Get-FileHash $core -Algorithm SHA256).Hash.ToLowerInvariant()
+          if ($expected -ne $actual) { throw "MoonBit core checksum mismatch" }
+          Expand-Archive -Path $core -DestinationPath (Join-Path $moonHome 'lib') -Force
+
+      - name: Add MoonBit to PATH (Unix)
+        if: runner.os != 'Windows'
+        run: echo "$HOME/.moon/bin" >> "$GITHUB_PATH"
+
+      - name: Add MoonBit to PATH (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: "Join-Path $env:USERPROFILE '.moon\\bin' | Out-File -FilePath $env:GITHUB_PATH -Append"
 
       - name: Verify toolchain
         run: moon version --all
