@@ -36,6 +36,10 @@ jobs:
         uses: actions/checkout@v4
         with:
           persist-credentials: false
+          fetch-depth: 0
+
+      - name: Add GitLink mirror for compliance audit
+        run: git remote add gitlink https://gitlink.org.cn/cassien/MoonBio.git
 
       - name: Install native dependencies (Ubuntu)
         if: matrix.os == 'ubuntu-latest'

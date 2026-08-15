@@ -52,6 +52,7 @@ $requiredFiles = @(
   "proposal-one-page.md",
   "source-attribution.md",
   "submission-status.md",
+  "CHANGELOG.md",
   "docs/usage-evidence.md",
   "docs/benchmarks.md",
   "docs/data/reference_sequences.fasta",
