@@ -78,6 +78,9 @@ jobs:
           actual="$(shasum -a 256 "$archive" | awk '{print $1}')"
           test "$expected" = "$actual"
           tar -xzf "$archive" --directory "$HOME/.moon"
+          # The release tarballs intentionally carry 0644 modes; restore the
+          # executable bit before adding the toolchain to PATH.
+          chmod +x "$HOME/.moon/bin"/*
 
           core="$RUNNER_TEMP/moonbit-core-v$MOONBIT_VERSION-universal.zip"
           core_checksum="$core.sha256"
