@@ -131,6 +131,20 @@ jobs:
         shell: pwsh
         run: "Join-Path $env:USERPROFILE '.moon\\bin' | Out-File -FilePath $env:GITHUB_PATH -Append"
 
+      - name: Bundle MoonBit Core (Unix)
+        if: runner.os != 'Windows'
+        shell: bash
+        run: |
+          moon -C "$HOME/.moon/lib/core" bundle --warn-list -a --all
+          moon -C "$HOME/.moon/lib/core" bundle --warn-list -a --target wasm-gc --quiet
+
+      - name: Bundle MoonBit Core (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          moon -C "$env:USERPROFILE/.moon/lib/core" bundle --warn-list -a --all
+          moon -C "$env:USERPROFILE/.moon/lib/core" bundle --warn-list -a --target wasm-gc --quiet
+
       - name: Verify toolchain
         run: moon version --all
 
