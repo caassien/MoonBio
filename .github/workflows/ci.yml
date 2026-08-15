@@ -161,6 +161,9 @@ jobs:
       - name: Test all targets
         run: moon test --target all
 
+      - name: Run CLI demo
+        run: moon run cmd/cli
+
       - name: Format and interface checks
         run: |
           moon fmt
